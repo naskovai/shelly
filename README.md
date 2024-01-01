@@ -1,0 +1,2 @@
+# shelly
+AI cmd assistant
