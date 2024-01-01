@@ -1,0 +1,45 @@
+name: Update Homebrew Formula
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  update-formula:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: main
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.0' # Check for the Ruby version required by Homebrew
+
+      - name: Download release
+        run: |
+          wget -O release.tar.gz "https://github.com/${{ github.repository }}/archive/${{ github.ref }}.tar.gz"
+
+      - name: Calculate SHA256
+        id: sha
+        run: |
+          echo "::set-output name=sha::$(sha256sum release.tar.gz | awk '{print $1}')"
+
+      - name: Update formula
+        run: |
+          FORMULA_FILE=Formula/shelly.rb
+          NEW_URL="https://github.com/${{ github.repository }}/archive/${{ github.ref }}.tar.gz"
+          sed -i -e "s|url \".*\"|url \"$NEW_URL\"|g" $FORMULA_FILE
+          sed -i "s|sha256 .*|sha256 \"${{ steps.sha.outputs.sha }}\"|" $FORMULA_FILE
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name 'Rumen Paletov'
+          git config --global user.email 'rumen.paletov@gmail.com'
+          git add Formula/shelly.rb
+          git commit -m "Update Homebrew formula for latest version."
+          git push origin main
+        env:
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN_FOR_GITHUB_ACTIONS }}
