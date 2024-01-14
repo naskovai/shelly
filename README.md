@@ -1,4 +1,4 @@
-# Shelly: Terminal Command Translator
+# Shelly: Write Terminal Commands in English
 
 Shelly is a powerful tool that translates English into commands that can be seamlessly executed in your terminal. You won't have to remember obscure commands anymore.
 
