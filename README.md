@@ -4,7 +4,7 @@ Shelly is a powerful tool that translates English into commands that can be seam
 
 ## How It Works
 
-Shelly uses AI to interpret plain English and translate it into accurate terminal commands.
+Shelly uses AI to interpret plain English and translate it into accurate terminal commands. In particular, it uses OpenAI's GPT-4, so you'll need an OpenAI API Key.
 
 ## Usage Examples
 
