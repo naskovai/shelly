@@ -1,6 +1,6 @@
 # Shelly: Terminal Command Translator
 
-Transform English into terminal commands effortlessly with Shelly. Ideal for both experts and beginners, it greatly simplifies your command-line experience.
+Shelly is a powerful tool that translates English into commands that can be seamlessly executed in your terminal. You won't have to remember obscure commands anymore.
 
 ## How It Works
 
