@@ -1,5 +1,14 @@
 #!/bin/bash
 
+get_configured_editor() {
+    local configfile=$1
+    configured_editor=$(grep '^EDITOR:' "$configfile" | cut -d ':' -f2 | xargs)
+    if [ -z "$configured_editor" ]; then
+        configured_editor=${VISUAL:-${EDITOR:-nano}}
+    fi
+    echo $configured_editor
+}
+
 USER_DATA_DIR="$HOME/.shelly"
 
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
@@ -41,7 +50,8 @@ if [[ "$1" == "--config" ]] || [ ! -f "$configfile" ]; then
     fi
 
     # Open the config file in the default editor for editing
-    ${VISUAL:-${EDITOR:-nano}} "$configfile"
+    editor=$(get_configured_editor "$configfile")
+    $editor "$configfile"
 
     # Exit after editing the config file
     exit 0
@@ -80,8 +90,8 @@ trap "rm -f '$tempfile'" EXIT
 # Write the command to the temporary file
 echo "$output" >"$tempfile"
 
-# Open the temporary file in the default editor for editing
-${VISUAL:-${EDITOR:-nano}} "$tempfile"
+editor=$(get_configured_editor "$configfile")
+$editor "$tempfile"
 
 # Read the possibly edited command back from the temporary file
 file_contents=$(cat "$tempfile")

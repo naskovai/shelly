@@ -1,3 +1,4 @@
+EDITOR: nano
 OPENAI_API_KEY: ''
 OPENAI_MODEL_NAME: 'gpt-4'
 OPENAI_COMPLETIONS_ENDPOINT_URL: 'https://api.openai.com/v1/chat/completions'
