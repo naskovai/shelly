@@ -1,8 +1,8 @@
 class Shelly < Formula
   desc "Shelly translates English instructions to terminal commands."
   homepage "https://github.com/paletov/shelly"
-  url "https://github.com/paletov/shelly/archive/refs/tags/v0.1.5.tar.gz"
-  sha256 "4da1883c0c79af1be85e27e23de777d84ee3abdffd4652ca4f9acf2d8dc5d275"
+  url "https://github.com/paletov/shelly/archive/refs/tags/v0.1.6.tar.gz"
+  sha256 "1633cb22a63f957e4071c78ecc7d5c74a92be5f82c38c699c64c25cabbb0ad52"
   version File.read(File.expand_path("../version.txt", __dir__)).strip
 
   depends_on "python@3"
