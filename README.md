@@ -4,9 +4,9 @@ Shelly is a powerful tool that translates English into commands that can be seam
 
 ## How It Works
 
-Upon calling it with an instruction, shelly opens an editor like nano/vim in the terminal with the proposed command. Saving executes the final version.
+Upon calling shelly with an instruction, it opens an editor like nano/vim in the terminal with the proposed command. Saving executes the final version.
 
-Shelly uses AI to interpret plain English and translate it into accurate terminal commands. In particular, it uses OpenAI's GPT-4, so you'll need an OpenAI API Key.
+Shelly uses AI to interpret plain English and translate it into accurate terminal commands. In particular, shelly uses OpenAI's GPT-4, so you'll need an OpenAI API Key.
 
 ## Usage Examples
 
