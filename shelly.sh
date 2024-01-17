@@ -26,7 +26,7 @@ fi
 
 # Check for --version argument
 if [[ "$1" == "--version" ]]; then
-    VERSION=$(cat version.txt)
+    VERSION=$(cat "$DIR/version.txt")
     echo $VERSION
     exit 0
 fi
