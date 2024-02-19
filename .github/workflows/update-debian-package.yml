@@ -1,0 +1,53 @@
+name: Publish to Ubuntu PPA
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build-and-upload:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Environment
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y devscripts debhelper dput gnupg
+
+      - name: Configure Git and GPG for Launchpad
+        run: |
+          git config --global user.email "rumen.paletov@gmail.com"
+          git config --global user.name "Rumen Paletov"
+          echo "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --import
+          echo "pinentry-mode loopback" >> ~/.gnupg/gpg.conf
+          gpg --list-keys
+
+      - name: Prepare Original Tarball and Update Changelog
+        env:
+          DEBFULLNAME: "Rumen Paletov"
+          DEBEMAIL: "rumen.paletov@gmail.com"
+        run: |
+          VERSION=$(echo ${{ github.ref }} | sed 's/refs\/tags\///')
+          ORIG_TARBALL="${{ github.repository }}_${VERSION}.orig.tar.gz"
+          wget -O "$ORIG_TARBALL" "https://github.com/${{ github.repository }}/archive/${{ github.ref_name }}.tar.gz"
+          tar zxvf "$ORIG_TARBALL" -C ..
+          mv "../${{ github.repository }}-${VERSION}" "../${{ github.repository }}_${VERSION}.orig"
+          
+          dch -v "${VERSION}-1" "Release of ${VERSION}"
+          dch -r ""
+          debuild -S -sa
+
+      - name: Sign Package
+        env:
+          GPG_KEY_ID: ${{ secrets.GPG_KEY_ID }}
+        run: |
+          debsign -k${{ secrets.GPG_KEY_ID }} ../${{ github.repository }}_${VERSION}-1_source.changes
+
+      - name: Upload to PPA
+        run: |
+          dput ppa:${{ secrets.LAUNCHPAD_PPA }} ../${{ github.repository }}_${VERSION}-1_source.changes
+        env:
+          LAUNCHPAD_PPA: ${{ secrets.LAUNCHPAD_PPA }}
+          LAUNCHPAD_USERNAME: ${{ secrets.LAUNCHPAD_USERNAME }}
