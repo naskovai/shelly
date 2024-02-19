@@ -1,0 +1,52 @@
+name: Update Ubuntu PPA
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "debian/changelog"
+
+jobs:
+  update-ppa:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: main
+
+      - name: Set up Environment
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y dpkg-dev debhelper
+
+      - name: Prepare for Packaging
+        run: |
+          # Replace these commands with those needed for your project
+          cp -r debian/ ./
+          # Or use dh_make to create debian files
+
+      - name: Build Debian Package
+        run: |
+          dpkg-buildpackage -us -uc -b
+
+      - name: Install GPG
+        run: |
+          sudo apt-get install -y gnupg
+
+      - name: Import GPG Key
+        run: |
+          echo "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --import
+
+      - name: Sign Package
+        run: |
+          debsign -k${{ secrets.GPG_KEY_ID }} ../shelly_*.changes
+
+      - name: Upload to PPA
+        run: |
+          dput ppa:${{ secrets.LAUNCHPAD_PPA }} ../shelly_*.changes
+
+      - name: Clean Up
+        run: |
+          rm -rf shelly_*
