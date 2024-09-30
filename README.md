@@ -26,8 +26,8 @@ shelly 'find "class" in files in this directory without the .venv dir'
 Install Shelly via Homebrew:
 
 ```bash
-brew untap paletov/shelly
-brew tap paletov/shelly https://github.com/paletov/shelly
+brew untap naskovai/shelly
+brew tap naskovai/shelly https://github.com/naskovai/shelly
 brew install shelly
 ```
 
